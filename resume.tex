@@ -1,0 +1,320 @@
+%==============================================================================
+%  FIRAT CEM GURBEY — Résumé
+%
+%
+%  ---------------------------------------------------------------------------
+%  WHERE TO EDIT WHAT
+%  ---------------------------------------------------------------------------
+%   * Colours, fonts, sizes and all spacing  -> "TUNING KNOBS" block below.
+%   * Your actual content                    -> starts at "%%% DOCUMENT".
+%
+%  Handy commands (defined further down):
+%     \sectionband{TITLE}                        a full-width coloured section bar
+%     \entry{COMPANY}{Role}{Location}{Date}      an employment heading
+%     \subentry{TITLE}{Date}                     a project heading
+%     \subentryrole{ORG}{Role}{Date}             a volunteering heading
+%     \begin{points} \item ... \end{points}      the bullet list
+%
+%==============================================================================
+
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{calc}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{anyfontsize}   % allows arbitrary point sizes without warnings
+\usepackage{fontawesome5}
+
+% -- Fonts ---------------------------------------------------------------------
+% The original PDF used three faces: Montserrat (name + section bars),
+% Helvetica Neue (job/school headings) and Muli (body text). Matched here with
+% Montserrat, Nimbus Sans (a free Helvetica clone) and Nunito — Muli has no
+% LaTeX package and Nunito's metrics line up with it almost exactly.
+% Each of these packages wants to own \sfdefault, so the families are named
+% explicitly below instead. To try a different body font, point \bodyfont and
+% \familydefault at  lato-TLF  (Lato is loaded and ready to use).
+\usepackage[tabular,lining]{montserrat}
+\usepackage[tabular,lining]{lato}
+\usepackage[tabular,lining]{nunito}
+\usepackage{helvet}   % Nimbus Sans, the free stand-in for Helvetica Neue
+
+
+\newcommand{\headfont}{\fontfamily{Montserrat-TLF}\selectfont}  % name, section bars
+% The other font packages rename the weights, so Helvetica's bold is asked for
+% by name here rather than through \textbf.
+\newcommand{\entryfont}{\fontfamily{phv}\fontseries{m}\selectfont} % job / school headings
+\newcommand{\entrybold}{\fontfamily{phv}\fontseries{b}\selectfont} % ...and its bold
+\newcommand{\bodyfont}{\fontfamily{Nunito-TLF}\selectfont}      % bullets, skills, contacts
+\renewcommand{\familydefault}{Nunito-TLF}
+
+%==============================================================================
+%%% TUNING KNOBS
+%==============================================================================
+
+% -- Colours (sampled from the original PDF) -----------------------------------
+\definecolor{accent}{HTML}{428DF6}   % blue    — name, section titles
+\definecolor{highlight}{HTML}{EDA042}% orange  — surname, job titles
+\definecolor{bandbg}{HTML}{E6EBF0}   % grey    — header + section bar fill
+\definecolor{ink}{HTML}{000000}      % body text
+
+% -- Page geometry -------------------------------------------------------------
+\usepackage[a4paper,
+            left=0.396in, right=0.375in,
+            top=0.015in, bottom=0.30in,
+            nohead, nofoot]{geometry}
+
+\newlength{\bandpad}    \setlength{\bandpad}{0.164in} % bars overhang the text block
+\newlength{\bandh}      \setlength{\bandh}{0.298in}   % section bar height
+\newlength{\headerh}    \setlength{\headerh}{0.726in} % top banner height
+\newlength{\namew}     \setlength{\namew}{3.928in}  % name block width (pushes contacts right)
+\newlength{\contactaw} \setlength{\contactaw}{1.961in} % width of contact column 1
+\newlength{\nameshift}  \setlength{\nameshift}{0.023in} % nudge name block up
+\newlength{\contactshift}\setlength{\contactshift}{0.042in} % nudge contacts up
+\newlength{\namegap}    \setlength{\namegap}{0.040in}  % name -> job title gap
+
+% Two-column row at the top (Education | Skills). Widths are bar widths.
+\newlength{\leftcolw}   \setlength{\leftcolw}{2.552in}
+\newlength{\colgap}     \setlength{\colgap}{0.051in}
+\newlength{\rightcolw}  \setlength{\rightcolw}{\textwidth+2\bandpad-\leftcolw-\colgap}
+
+% -- Type sizes ----------------------------------------------------------------
+\newcommand{\namesize}{\fontsize{21pt}{21pt}\selectfont}
+\newcommand{\titlesize}{\fontsize{12.5pt}{12.5pt}\selectfont}
+\newcommand{\contactsize}{\fontsize{8.9pt}{10.7pt}\selectfont}
+\newcommand{\sectionsize}{\fontsize{14.7pt}{14.7pt}\selectfont}
+\newcommand{\entrysize}{\fontsize{13.4pt}{13.4pt}\selectfont}   % company + location
+\newcommand{\rolesize}{\fontsize{12.6pt}{12.6pt}\selectfont}   % the orange job title
+\newcommand{\datesize}{\fontsize{12.5pt}{12.5pt}\selectfont}   % right-hand dates
+\newcommand{\subentrysize}{\fontsize{11.5pt}{11.5pt}\selectfont}
+\newcommand{\bodysize}{\fontsize{10pt}{13.25pt}\selectfont}
+\newcommand{\edusize}{\fontsize{14.6pt}{14.6pt}\selectfont}    % school name
+\newcommand{\edudatesize}{\fontsize{9.7pt}{9.7pt}\selectfont}  % school dates
+\newcommand{\degreesize}{\fontsize{11.4pt}{11.4pt}\selectfont}% degree line
+
+% -- Vertical rhythm -----------------------------------------------------------
+\newlength{\afterbanner}  \setlength{\afterbanner}{0.147in}  % banner -> first bar
+\newlength{\aftercolumns} \setlength{\aftercolumns}{0.119in} % Education/Skills row -> next bar
+\newlength{\abovesection} \setlength{\abovesection}{0.205in} % space before a bar
+\newlength{\belowsection} \setlength{\belowsection}{0.105in} % space after a bar
+\newlength{\betweenentry} \setlength{\betweenentry}{0.105in} % between two jobs
+\newlength{\aboveitems}   \setlength{\aboveitems}{0.014in}   % heading -> bullets
+
+% Gaps between the four lines of the Education block (may be negative).
+\newlength{\edugapa} \setlength{\edugapa}{-0.015in} % school   -> dates
+\newlength{\edugapb} \setlength{\edugapb}{0.013in}  % dates    -> degree
+\newlength{\edugapc} \setlength{\edugapc}{0.039in}  % degree   -> minor
+
+%==============================================================================
+%%% MACHINERY  (you rarely need to touch anything below here)
+%==============================================================================
+
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\pagestyle{empty}
+\raggedbottom
+
+% Separator between company / role / location
+\newcommand{\sep}{\hspace{0.15em}\textperiodcentered\hspace{0.15em}}
+
+% A coloured bar of a given width, vertically centring its content.
+% #1 = width, #2 = height, #3 = content
+\newcommand{\bandbox}[3]{%
+  \begingroup
+    \setlength{\fboxsep}{0pt}%
+    \colorbox{bandbg}{\parbox[c][#2][c]{#1}{\hspace*{\bandpad}#3}}%
+  \endgroup}
+
+% Full-width section bar, overhanging the text block on both sides.
+\newcommand{\sectionband}[1]{%
+  \par\vspace{\abovesection}%
+  \makebox[\textwidth][l]{\hspace*{-\bandpad}%
+    \bandbox{\textwidth+2\bandpad}{\bandh}{%
+      \headfont\bfseries\sectionsize\color{accent}\MakeUppercase{#1}}}%
+  \par\vspace{\belowsection}}
+
+% Bar used for the side-by-side Education / Skills headings.
+\newcommand{\colband}[2]{%
+  \bandbox{#1}{\bandh}{\headfont\bfseries\sectionsize\color{accent}\MakeUppercase{#2}}}
+
+% Employment heading:  COMPANY · Role · Location .................... Date
+\newcommand{\entry}[4]{%
+  \entryfont\entrysize
+  {\entrybold\color{ink}\MakeUppercase{#1}}%
+  {\rolesize\sep\color{highlight}#2\sep}%
+  {\entryfont\color{ink}#3}%
+  \hfill{\entrybold\datesize\color{ink}#4}\par}
+
+% Project / volunteering heading:  TITLE ............................ Date
+% NB: every \entrybold stays inside its own { } group. Left unbraced it leaks
+% past the \par and turns the bullet list underneath bold too.
+\newcommand{\subentry}[2]{%
+  \entryfont\subentrysize
+  {\entrybold\color{ink}\MakeUppercase{#1}}%
+  \hfill{\entrybold\color{ink}#2}\par}
+
+% Same, with a role after the title (used in Volunteering).
+\newcommand{\subentryrole}[3]{%
+  \entryfont\subentrysize
+  {\entrybold\color{ink}\MakeUppercase{#1}}%
+  \sep{\entrybold\color{ink}#2}%
+  \hfill{\entrybold\color{ink}#3}\par}
+
+% The bullet list.
+\newlist{points}{itemize}{1}
+\setlist[points]{
+  topsep=\aboveitems, partopsep=0pt, parsep=0pt, itemsep=0pt,
+  leftmargin=0.242in, labelsep=0.080in, labelwidth=0.079in,
+  align=left,
+  label=\raisebox{0.05ex}{\footnotesize\textbullet},
+  before=\bodyfont\bodysize\color{ink}\raggedright}
+
+% One line of the contact block: icon, then text.
+\newcommand{\contact}[2]{\makebox[0.85em][r]{#1}\hspace{0.35em}#2}
+
+%==============================================================================
+%%% DOCUMENT
+%==============================================================================
+\begin{document}
+\bodyfont
+
+%------------------------------------------------------------------ TOP BANNER
+% Full-bleed grey banner: name + title on the left, contact details on the right.
+\makebox[\textwidth][l]{%
+\hspace*{-\dimexpr\bandpad+0.232in\relax}%
+\begingroup
+\setlength{\fboxsep}{0pt}%
+\colorbox{bandbg}{\parbox[c][\headerh][c]{\paperwidth}{%
+  \hspace*{0.396in}%
+  \raisebox{\nameshift}{\begin{minipage}[c]{\namew}
+    {\headfont\bfseries\namesize
+      \textcolor{accent}{FIRAT CEM}\hspace{0.26em}\textcolor{highlight}{GURBEY}}\\[\namegap]
+    {\headfont\bfseries\titlesize\color{ink}Software Developer}
+  \end{minipage}}%
+  \raisebox{\contactshift}{\begin{minipage}[c]{\contactaw}
+    \bodyfont\contactsize\color{ink}
+    \contact{\faEnvelope}{\href{mailto:REDACTED@mail.com}{REDACTED}}\\
+    \contact{\faPhone}{REDACTED}\\
+    % \contact{\faMapMarker}{Montreal, QC}
+  \end{minipage}}%
+  \raisebox{\contactshift}{\begin{minipage}[c]{1.5in}
+    \bodyfont\contactsize\color{ink}
+    \contact{\faLinkedinIn}{\href{https://www.linkedin.com/in/cemgurbey}{cemgurbey}}\\
+    \contact{\faGithub}{\href{https://github.com/cemgurbey}{cemgurbey}}\\
+    \strut
+  \end{minipage}}%
+}}%
+\endgroup
+}%
+\par\vspace{\afterbanner}
+
+%--------------------------------------------------- EDUCATION  |  SKILLS
+\makebox[\textwidth][l]{%
+\hspace*{-\bandpad}%
+\begin{minipage}[t]{\leftcolw}
+  \colband{\leftcolw}{Education}\\[\belowsection]
+  \hspace*{\bandpad}%
+  \begin{minipage}[t]{\dimexpr\leftcolw-\bandpad\relax}
+    \raggedright
+    {\entrybold\edusize\color{ink}McGill University}\\[\edugapb]
+    {\entrybold\edudatesize\color{ink}Sept. 2017 to May. 2022}\\[\edugapb]
+    {\entryfont\degreesize\color{ink}B.Sc. Computer Science}\\[\edugapc]
+    {\bodyfont\bodysize\color{ink}Minor in French}
+  \end{minipage}
+\end{minipage}%
+\hspace{\colgap}%
+\begin{minipage}[t]{\rightcolw}
+  \colband{\rightcolw}{Skills}\\[\belowsection]
+  \hspace*{\bandpad}%
+  \begin{minipage}[t]{\dimexpr\rightcolw-\bandpad\relax}
+    \bodyfont\bodysize\color{ink}\raggedright
+    \textbf{PROGRAMMING LANGUAGES:} Python, C/C++, Ruby, JavaScript\\
+    \textbf{TECHNOLOGIES:} Claude, MCP, Linux, Bash, Git, SQL, NoSQL, REST, GraphQL, HTML/CSS, React, Rails, Django, Pandas, Google Cloud, AWS, Docker\\
+    \textbf{LANGUAGES:} English, French, Turkish
+  \end{minipage}
+\end{minipage}}
+
+\vspace{\aftercolumns}
+
+%---------------------------------------------------------------- EMPLOYMENT
+\sectionband{Employment}
+
+\entry{ARC Group Benefits Inc.}{Software Developer}{Montréal, QC}{2023 Sept. to Present}
+\begin{points}
+  \item Led the migration of operational teams from waterfall-style project tracking to Asana by building a bidirectional Rails–Asana sync via the Asana's API and webhooks, pushing projects into Asana to enable an agile workflow, and using webhook-driven callbacks to automate downstream Rails actions like policy renewals and report generations
+  \item Shipped a Rails commission platform handling configurable, multi-party payout splits with per-recipient, per-category rate rules, including reconciliation logic when a third party withholds the full payment upfront and remits the remaining share separately, and cron-scheduled statement generation, replacing a manual process
+  \item Served as engineering escalation point for 80+ production incidents and bugs, including recovery from a migration failure that wiped customer data, restoring from a prior state and verifying integrity via system logs
+  \item Strengthened SOC 2 and security compliance by closing admin access-control gaps, restricting sensitive reports by role, automating contract-end account revocation, and eliminating user-enumeration and information-leakage vectors in UI
+  \item Reviewed 300+ pull requests across nine engineers, catching defects before release and keeping conventions consistent
+\end{points}
+
+\vspace{\betweenentry}
+\entry{Amazon Music}{Software Development Engineer}{Montréal, QC}{June 2023 to Aug. 2023}
+\begin{points}
+  \item Ported Swift/Kotlin screens to React Native, consolidating iOS/Android into one codebase and reducing maintenance
+  \item Built the customer onboarding interface with scrollable lists, carousels, and interactive navigation controls
+  \item Connected components to GraphQL, rendering live account and catalogue data with loading and error states
+\end{points}
+
+\vspace{\betweenentry}
+\entry{Shopify}{Backend Developer}{Montréal, QC}{June 2022 to May 2023}
+\begin{points}
+  \item Built and scaled custom data (metafields and metaobjects) in Rails for Shopify's 1st and 3rd party apps, migrating endpoints to GraphQL, replacing deprecated content permissions with metaobjects, and reclaiming orphaned storage. 
+  \item Cut metaobject create/update load times 10\% with bulk operations; hardened the Metafield loader with fallbacks and fixed a Rails/MySQL string encoding mismatch
+  \item Localized money metafield currencies by country for the Admin API and extended GraphQL endpoints with new fields to eliminate redundant client queries
+  \item Resolved cross-API inconsistencies through team bug hunts, and kept Shopify's public API documentation current with working query examples
+\end{points}
+
+\vspace{\betweenentry}
+\entry{Matrox}{Software Designer}{Dorval, QC}{Jan. 2022 to April 2022}
+\begin{points}
+  \item Worked on the development of the Mura IPX video capture cards on Windows and Linux platforms using C/C++
+  \item Integrated the SRT protocol into Matrox's Vwlib library, cutting down the packet loss of streams to less than 1\%
+  \item Refactored the codebase of casting protocols in C++, delivering a clean interface for a complex subsystem
+  \item Added timestamps on system outputs of the encoder/decoder to pinpoint behaviour changes during debugging
+  % \item Reduced the data-collection workload of the QA department by writing Python scripts automating the process
+\end{points}
+
+%------------------------------------------------------------------ PROJECTS
+\sectionband{Projects}
+
+\subentry{\href{https://github.com/cemgurbey/plastic-water-segmentation}{Computer Vision Project}}{Aug. 2026 to Present}
+\begin{points}
+  \item Built a machine learning model that detects plastic residue on water bodies using instance segmentation
+  \item Generated synthetic COCO datasets with instance annotations to train on regions of plastic residue
+  \item Trained Mask R-CNN on Keras and TensorFlow to detect and segment residue in real-world images
+\end{points}
+
+\vspace{\betweenentry}
+\subentry{\href{https://github.com/cemgurbey/sleep-log-data-analysis/tree/main}{Sleep Log Analysis Tool}}{May 2022 to Aug. 2022}
+\begin{points}
+  \item Converted McGill's Attention, Behaviour and Sleep Laboratory's survey data into SPSS variables in Python
+  \item Preprocessed entries by normalizing fields and fixing data conversion issues raised by headers and file formats
+  \item Modularized SPSS variable creation operations, allowing future extensibility for the survey outline
+  \item Transposed horizontally-integrated data for faster processing using NumPy and pandas
+\end{points}
+
+%-------------------------------------------------------------- VOLUNTEERING
+% \sectionband{Volunteering}
+
+% \subentryrole{DigLit.ca}{Backend Developer}{Jan. 2021 to Dec. 2021}
+% \begin{points}
+%   \item Organized database tables and implemented REST endpoints of non-profit websites in Django and PostgreSQL
+%   \item Addressed the performance bottlenecks in client applications by using prefetches, reducing the query calls by 53\%
+%   \item Integrated user/admin permissions and e-mail notifications in web servers using DRF and SendGrid
+%   \item Wrote automated tests for backend features with Pytest and contributed to DigLit's documentation
+% \end{points}
+
+% \vspace{\betweenentry}
+% \subentryrole{McGill Space Group}{Software Engineer}{Sept. 2018 to Apr. 2019}
+% \begin{points}
+%   \item Deployed CubeSat software into arm-based STM32 microcontroller for Canadian Satellite Challenge using C
+%   \item Designed interrupt routines of the satellite that allowed power and resource management between subsystems
+%   \item Set up the development environment by adding a CMake configuration to the project
+% \end{points}
+
+\end{document}
