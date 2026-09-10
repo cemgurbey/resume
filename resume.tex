@@ -245,7 +245,8 @@
 
 \entry{ARC Group Benefits Inc.}{Software Developer}{Montréal, QC}{2023 Sept. to Present}
 \begin{points}
-  \item Led the migration of operational teams from waterfall-style project tracking to Asana by building a bidirectional Rails–Asana sync via the Asana's API and webhooks, pushing projects into Asana to enable an agile workflow, and using webhook-driven callbacks to automate downstream Rails actions like policy renewals and report generations
+  \item Led the migration of operational teams from waterfall-style project tracking to Asana by building a bidirectional Rails–Asana integration using the Asana API and webhooks, enabling agile workflows and automating downstream actions such as policy renewals and report generation
+  \item Designed a concurrency-control mechanism to serialize webhook processing around Rails transactions, preventing race conditions and ensuring webhook-driven updates were queued and applied after record locks were released
   \item Shipped a Rails commission platform handling configurable, multi-party payout splits with per-recipient, per-category rate rules, including reconciliation logic when a third party withholds the full payment upfront and remits the remaining share separately, and cron-scheduled statement generation, replacing a manual process
   \item Served as engineering escalation point for 80+ production incidents and bugs, including recovery from a migration failure that wiped customer data, restoring from a prior state and verifying integrity via system logs
   \item Strengthened SOC 2 and security compliance by closing admin access-control gaps, restricting sensitive reports by role, automating contract-end account revocation, and eliminating user-enumeration and information-leakage vectors in UI
@@ -263,10 +264,10 @@
 \vspace{\betweenentry}
 \entry{Shopify}{Backend Developer}{Montréal, QC}{June 2022 to May 2023}
 \begin{points}
-  \item Built and scaled custom data (metafields and metaobjects) in Rails for Shopify's 1st and 3rd party apps, migrating endpoints to GraphQL, replacing deprecated content permissions with metaobjects, and reclaiming orphaned storage. 
-  \item Cut metaobject create/update load times 10\% with bulk operations; hardened the Metafield loader with fallbacks and fixed a Rails/MySQL string encoding mismatch
-  \item Localized money metafield currencies by country for the Admin API and extended GraphQL endpoints with new fields to eliminate redundant client queries
-  \item Resolved cross-API inconsistencies through team bug hunts, and kept Shopify's public API documentation current with working query examples
+  \item Built and scaled custom data (metafields and metaobjects) in Rails for Shopify’s 1st- and 3rd-party apps, migrating endpoints from REST to GraphQL, replacing deprecated content permissions with metaobjects
+  \item Reduced metaobject create/update latency by 10\% through bulk operations; hardened the Metafield loader with fallbacks and resolved a Rails/MySQL string-encoding mismatch
+  \item Implemented country-specific currency localization for money metafields in the Shopify's admin API and extended GraphQL schemas with new fields to eliminate redundant client-side queries
+  \item Diagnosed cross-API inconsistencies through targeted debugging and contributed fixes across services; maintained Shopify’s public API documentation with validated GraphQL query examples
 \end{points}
 
 \vspace{\betweenentry}
@@ -290,10 +291,10 @@
 \end{points}
 
 \vspace{\betweenentry}
-\subentry{\href{https://github.com/cemgurbey/sleep-log-data-analysis/tree/main}{Sleep Log Analysis Tool}}{May 2022 to Aug. 2022}
+\subentry{\href{https://github.com/cemgurbey/sleep-log-data-analysis}{Sleep Log Analysis Tool}}{May 2022 to Aug. 2022}
 \begin{points}
   \item Converted McGill's Attention, Behaviour and Sleep Laboratory's survey data into SPSS variables in Python
-  \item Preprocessed entries by normalizing fields and fixing data conversion issues raised by headers and file formats
+  % \item Preprocessed entries by normalizing fields and fixing data conversion issues raised by headers and file formats
   \item Modularized SPSS variable creation operations, allowing future extensibility for the survey outline
   \item Transposed horizontally-integrated data for faster processing using NumPy and pandas
 \end{points}
