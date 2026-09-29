@@ -1,0 +1,38 @@
+name: Build resume PDF
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - resume.tex
+      - .github/workflows/build-pdf.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX to PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: resume.tex
+          args: -pdf -interaction=nonstopmode -halt-on-error
+          extra_packages: "lato montserrat nunito psnfss fontawesome5 enumitem microtype anyfontsize geometry tools hyperref xcolor"
+
+      - name: Commit the built PDF
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f resume.pdf
+          if git diff --cached --quiet; then
+            echo "No changes to resume.pdf"
+          else
+            git commit -m "Build resume.pdf [skip ci]"
+            git push
+          fi

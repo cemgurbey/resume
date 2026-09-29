@@ -233,7 +233,7 @@
   \begin{minipage}[t]{\dimexpr\rightcolw-\bandpad\relax}
     \bodyfont\bodysize\color{ink}\raggedright
     \textbf{PROGRAMMING LANGUAGES:} Python, C/C++, Ruby, JavaScript\\
-    \textbf{TECHNOLOGIES:} Claude, MCP, Linux, Bash, Git, SQL, NoSQL, REST, GraphQL, HTML/CSS, React, Rails, Django, Pandas, Google Cloud, AWS, Docker\\
+    \textbf{TECHNOLOGIES:} Claude, MCP, Linux, Bash, Git, SQL, NoSQL, REST, GraphQL, HTML/CSS, React, Rails, Django, Pandas, PyTorch, Google Cloud, AWS, Docker\\
     \textbf{LANGUAGES:} English, French, Turkish
   \end{minipage}
 \end{minipage}}
@@ -286,16 +286,17 @@
 \subentry{\href{https://github.com/cemgurbey/plastic-water-segmentation}{Computer Vision Project}}{Aug. 2026 to Present}
 \begin{points}
   \item Built a machine learning model that detects plastic residue on water bodies using instance segmentation
-  \item Generated synthetic COCO datasets with instance annotations to train on regions of plastic residue
-  \item Trained Mask R-CNN on Keras and TensorFlow to detect and segment residue in real-world images
+  \item Generated synthetic training images with diffusion inpainting, replacing cut-and-paste composites
+  \item Refined masks with SAM 2 and trained YOLO11 segmentation on native polygon labels in PyTorch
+  \item Repackaged the workflow as a pip-installable CLI (synthesize, train, infer) with modern Python tooling
 \end{points}
 
 \vspace{\betweenentry}
-\subentry{\href{https://github.com/cemgurbey/sleep-log-data-analysis}{Sleep Log Analysis Tool}}{May 2022 to Aug. 2022}
+\subentry{\href{https://github.com/cemgurbey/sleep-log-data-analysis}{Sleep Log Analysis Tool}}{May 2022 to Sept. 2026}
 \begin{points}
   \item Converted McGill's Attention, Behaviour and Sleep Laboratory's survey data into SPSS variables in Python
-  % \item Preprocessed entries by normalizing fields and fixing data conversion issues raised by headers and file formats
-  \item Modularized SPSS variable creation operations, allowing future extensibility for the survey outline
+  \item Rebuilt the monolithic notebook as an installable package with CLI commands and typed modules
+  \item Added a seeded synthetic data generator, so the pipeline runs end-to-end with example results
   \item Transposed horizontally-integrated data for faster processing using NumPy and pandas
 \end{points}
 
